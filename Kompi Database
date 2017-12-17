@@ -1,0 +1,119 @@
+/*==============================================================*/
+/* DBMS name:      MySQL 5.0                                    */
+/* Created on:     03/12/2017 9:17:48                           */
+/*==============================================================*/
+
+
+/*==============================================================*/
+/* Table: design                                                */
+/*==============================================================*/
+create table design
+(
+   no_desain            numeric(10,0) not null,
+   no_designer          numeric(10,0) not null,
+   tingkat_kesulitan    int not null,
+   primary key (no_desain)
+);
+
+/*==============================================================*/
+/* Table: designer                                              */
+/*==============================================================*/
+create table designer
+(
+   no_designer          numeric(10,0) not null,
+   nama                 varchar(30),
+   username             varchar(30) not null,
+   email                varchar(30),
+   no_hp                int,
+   password             varchar(20) not null,
+   primary key (no_designer)
+);
+
+/*==============================================================*/
+/* Table: operator                                              */
+/*==============================================================*/
+create table operator
+(
+   no_operator          numeric(10,0) not null,
+   nama                 varchar(30),
+   username             varchar(30) not null,
+   email                varchar(30),
+   no_hp                int,
+   password             varchar(20) not null,
+   primary key (no_operator)
+);
+
+/*==============================================================*/
+/* Table: paket                                                 */
+/*==============================================================*/
+create table paket
+(
+   no_paket             numeric(10,0) not null,
+   no_pesanan           numeric(10,0) not null,
+   no_room              numeric(10,0) not null,
+   no_pc                numeric(10,0) not null,
+   primary key (no_paket)
+);
+
+/*==============================================================*/
+/* Table: pesanan                                               */
+/*==============================================================*/
+create table pesanan
+(
+   no_pesanan           numeric(10,0) not null,
+   no_paket             numeric(10,0),
+   no_user              numeric(10,0) not null,
+   no_desain            numeric(10,0),
+   primary key (no_pesanan)
+);
+
+/*==============================================================*/
+/* Table: tagihan                                               */
+/*==============================================================*/
+create table tagihan
+(
+   no_tagihan           numeric(10,0) not null,
+   no_user              numeric(10,0) not null,
+   no_operator          numeric(10,0) not null,
+   no_pesanan           numeric(10,0),
+   primary key (no_tagihan)
+);
+
+/*==============================================================*/
+/* Table: user                                                  */
+/*==============================================================*/
+create table user
+(
+   no_user              numeric(10,0) not null,
+   nama                 varchar(30),
+   username             varchar(30) not null,
+   email                varchar(30),
+   no_hp                int,
+   password             varchar(20) not null,
+   primary key (no_user)
+);
+
+alter table design add constraint FK_membuat foreign key (no_designer)
+      references designer (no_designer) on delete restrict on update restrict;
+
+alter table paket add constraint FK_mempunyai2 foreign key (no_pesanan)
+      references pesanan (no_pesanan) on delete restrict on update restrict;
+
+alter table pesanan add constraint FK_mememsan foreign key (no_user)
+      references user (no_user) on delete restrict on update restrict;
+
+alter table pesanan add constraint FK_memiliki foreign key (no_desain)
+      references design (no_desain) on delete restrict on update restrict;
+
+alter table pesanan add constraint FK_mempunyai foreign key (no_paket)
+      references paket (no_paket) on delete restrict on update restrict;
+
+alter table tagihan add constraint FK_membayar foreign key (no_user)
+      references user (no_user) on delete restrict on update restrict;
+
+alter table tagihan add constraint FK_mengakses foreign key (no_operator)
+      references operator (no_operator) on delete restrict on update restrict;
+
+alter table tagihan add constraint FK_terdapat foreign key (no_pesanan)
+      references pesanan (no_pesanan) on delete restrict on update restrict;
+
